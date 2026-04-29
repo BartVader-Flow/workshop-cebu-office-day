@@ -1,0 +1,1335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Office Day Cebu 2026 · Rail-Flow × Amihan Solutions × Aurizon</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --rf-dark:   #0b3424;
+      --rf-mid:    #1a6e3c;
+      --rf-light:  #9dc291;
+      --am-dark:   #1C4485;
+      --am-mid:    #0056A7;
+      --am-light:  #4a9fe0;
+      --au-dark:   #b84800;
+      --au-mid:    #e85d04;
+      --au-light:  #ff9a5c;
+      --bg-base:   #070d16;
+      --bg-surface:#0c1520;
+      --text:      #f0f4f8;
+      --muted:     #8a9ab0;
+      --footer-h:  64px;
+      --header-h:  6px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg-base);
+      color: var(--text);
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* ── Progress bar ── */
+    #progressBar {
+      position: fixed;
+      top: 0; left: 0;
+      height: var(--header-h);
+      background: linear-gradient(90deg, var(--au-mid) 0%, var(--rf-mid) 50%, var(--am-mid) 100%);
+      transition: width 0.45s cubic-bezier(.4,0,.2,1);
+      z-index: 300;
+    }
+
+    /* ── Slide container ── */
+    #slidesContainer {
+      position: fixed;
+      top: var(--header-h);
+      left: 0; right: 0;
+      bottom: var(--footer-h);
+    }
+
+    /* ── Slides ── */
+    .slide {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 56px 96px;
+      text-align: center;
+      opacity: 0;
+      transform: translateX(70px);
+      transition: opacity 0.38s ease, transform 0.38s ease;
+      pointer-events: none;
+    }
+    .slide.active {
+      opacity: 1;
+      transform: translateX(0);
+      pointer-events: all;
+    }
+    .slide.exit {
+      opacity: 0;
+      transform: translateX(-70px);
+    }
+
+    /* ── Background variants ── */
+    .bg-welcome {
+      background:
+        radial-gradient(ellipse 55% 50% at 15% 50%, rgba(232,93,4,0.15) 0%, transparent 70%),
+        radial-gradient(ellipse 55% 50% at 85% 50%, rgba(0,86,167,0.15) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 60% at 50% 50%, rgba(26,110,60,0.08) 0%, transparent 70%),
+        var(--bg-base);
+    }
+    .bg-agenda { background: var(--bg-surface); }
+
+    .bg-h1 {
+      background: linear-gradient(135deg, #1a0400 0%, #5c1a00 40%, var(--au-mid) 100%);
+    }
+    .bg-h2 {
+      background: linear-gradient(135deg, #020f08 0%, #06331a 40%, var(--rf-mid) 100%);
+    }
+    .bg-h3 {
+      background: linear-gradient(135deg, #020f28 0%, #041e5c 40%, var(--am-mid) 100%);
+    }
+    .bg-h4 {
+      background: linear-gradient(135deg, #0a0418 0%, #1e0a45 40%, #3d1a90 100%);
+    }
+
+    .bg-q1  { background: radial-gradient(ellipse at 50% 40%, rgba(232,93,4,0.13) 0%, var(--bg-base) 65%); }
+    .bg-q2  { background: radial-gradient(ellipse at 50% 40%, rgba(26,110,60,0.12) 0%, var(--bg-base) 65%); }
+    .bg-q3  { background: radial-gradient(ellipse at 50% 40%, rgba(0,86,167,0.12) 0%, var(--bg-base) 65%); }
+    .bg-q4  { background: radial-gradient(ellipse at 50% 40%, rgba(61,26,144,0.15) 0%, var(--bg-base) 65%); }
+    .bg-demo { background: radial-gradient(ellipse at 50% 35%, rgba(232,93,4,0.10) 0%, var(--bg-base) 65%); }
+    .bg-break { background: radial-gradient(ellipse at 50% 40%, rgba(180,130,0,0.12) 0%, var(--bg-base) 65%); }
+    .bg-hack { background: linear-gradient(135deg, #010c1e 0%, #022050 50%, #043775 100%); }
+    .bg-hack-q { background: radial-gradient(ellipse at 50% 35%, rgba(10,70,160,0.18) 0%, var(--bg-base) 65%); }
+
+    /* ── Deco line ── */
+    .deco-line {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--au-light), var(--rf-light), var(--am-light));
+      opacity: 0.5;
+    }
+
+    /* ── Typography ── */
+    .eyebrow {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      opacity: 0.5;
+      margin-bottom: 16px;
+    }
+    .eyebrow.c1 { color: var(--au-light); opacity: 0.8; }
+    .eyebrow.c2 { color: var(--rf-light); opacity: 0.8; }
+    .eyebrow.c3 { color: var(--am-light); opacity: 0.8; }
+    .eyebrow.c4 { color: #b39ddb; opacity: 0.8; }
+
+    .main-title {
+      font-size: 3.8rem;
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      margin-bottom: 20px;
+    }
+    .subtitle {
+      font-size: 1.35rem;
+      font-weight: 400;
+      opacity: 0.65;
+      max-width: 680px;
+      line-height: 1.6;
+    }
+
+    .title-rule {
+      width: 60px;
+      height: 3px;
+      border-radius: 2px;
+      margin: 0 auto 24px;
+      background: linear-gradient(90deg, var(--au-light), var(--rf-light), var(--am-light));
+    }
+
+    /* ── Question layout ── */
+    .q-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      padding: 5px 16px;
+      border-radius: 20px;
+      margin-bottom: 36px;
+      border: 1px solid;
+    }
+    .qb-1 { border-color: rgba(255,154,92,0.4); color: var(--au-light); }
+    .qb-2 { border-color: rgba(157,194,145,0.4); color: var(--rf-light); }
+    .qb-3 { border-color: rgba(74,159,224,0.4); color: var(--am-light); }
+    .qb-4 { border-color: rgba(179,157,219,0.4); color: #b39ddb; }
+
+    .q-text {
+      font-size: 2.9rem;
+      font-weight: 700;
+      line-height: 1.2;
+      max-width: 920px;
+      letter-spacing: -0.01em;
+    }
+    .q-hint {
+      font-size: 0.9rem;
+      opacity: 0.35;
+      margin-top: 32px;
+      font-weight: 400;
+      letter-spacing: 0.04em;
+    }
+
+    /* Colored spans */
+    .c1 { color: var(--au-light); }
+    .c2 { color: var(--rf-light); }
+    .c3 { color: var(--am-light); }
+    .c4 { color: #b39ddb; }
+    .cgold { color: #f0c040; }
+
+    /* ── Info box ── */
+    .info-box {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px;
+      padding: 28px 40px;
+      max-width: 740px;
+      font-size: 1.1rem;
+      line-height: 1.8;
+      margin-top: 28px;
+      text-align: left;
+    }
+    .info-box .row { display: flex; align-items: flex-start; gap: 12px; padding: 4px 0; }
+
+    /* ── Agenda list ── */
+    .agenda-wrap {
+      text-align: left;
+      width: 100%;
+      max-width: 680px;
+    }
+    .a-row {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      font-size: 1.05rem;
+    }
+    .a-row:last-child { border-bottom: none; }
+    .a-time {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--muted);
+      min-width: 56px;
+      letter-spacing: 0.04em;
+    }
+    .a-act { font-weight: 500; }
+    .a-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .dot-rf  { background: var(--rf-light); }
+    .dot-am  { background: var(--am-light); }
+    .dot-au  { background: var(--au-light); }
+    .dot-mix { background: linear-gradient(135deg, var(--au-light), var(--rf-light)); }
+    .dot-brk { background: #f0c040; }
+
+    /* ── Bullet list ── */
+    .bullet-list {
+      list-style: none;
+      text-align: left;
+      max-width: 680px;
+      width: 100%;
+    }
+    .bullet-list li {
+      padding: 10px 0 10px 28px;
+      font-size: 1.1rem;
+      position: relative;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      line-height: 1.5;
+    }
+    .bullet-list li:last-child { border-bottom: none; }
+    .bullet-list li::before { content: '→'; position: absolute; left: 0; opacity: 0.35; }
+
+    /* ── Big emoji ── */
+    .big-emoji { font-size: 5rem; margin-bottom: 24px; line-height: 1; }
+
+    /* ── Tag strip ── */
+    .tag-strip {
+      display: flex;
+      gap: 12px;
+      margin-top: 28px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .tag {
+      padding: 5px 18px;
+      border-radius: 20px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border: 1px solid;
+    }
+    .tag-rf { border-color: rgba(157,194,145,0.5); color: var(--rf-light); }
+    .tag-am { border-color: rgba(74,159,224,0.5); color: var(--am-light); }
+    .tag-au { border-color: rgba(232,93,4,0.5); color: var(--au-light); }
+
+    /* ── Train illustration ── */
+    .train-wrap {
+      margin: 24px 0 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .train-svg {
+      width: 320px;
+      height: 80px;
+      opacity: 0.85;
+    }
+
+    /* ── Aurizon logo badge ── */
+    .aurizon-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(232,93,4,0.12);
+      border: 1px solid rgba(232,93,4,0.35);
+      border-radius: 10px;
+      padding: 8px 20px;
+      margin-top: 16px;
+    }
+    .aurizon-badge .au-logo-text {
+      font-size: 1.2rem;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      color: var(--au-light);
+    }
+
+    /* ── Footer ── */
+    #footer {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      height: var(--footer-h);
+      background: rgba(7,13,22,0.95);
+      border-top: 1px solid rgba(255,255,255,0.07);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 28px;
+      z-index: 300;
+      backdrop-filter: blur(12px);
+    }
+
+    .logo-group {
+      display: flex;
+      align-items: center;
+      gap: 0;
+    }
+    .logo-pill {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 8px;
+      padding: 6px 14px;
+      display: flex;
+      align-items: center;
+    }
+    .logo-pill img {
+      height: 22px;
+      width: auto;
+      object-fit: contain;
+    }
+    .logo-rf img  { filter: brightness(0) invert(1); }
+    .logo-am img  { filter: brightness(0) invert(1); }
+    .logo-au-pill {
+      background: white;
+      border: 1px solid rgba(232,93,4,0.3);
+      border-radius: 8px;
+      padding: 5px 12px;
+      display: flex;
+      align-items: center;
+    }
+    .logo-au-text {
+      font-size: 0.82rem;
+      font-weight: 900;
+      letter-spacing: 0.1em;
+      color: var(--au-light);
+    }
+
+    /* ── Photo layouts ── */
+    .photo-strip {
+      display: flex;
+      gap: 8px;
+      margin: 14px 0 10px;
+      justify-content: center;
+    }
+    .photo-strip img {
+      height: 76px;
+      width: 106px;
+      object-fit: cover;
+      border-radius: 8px;
+      opacity: 0.78;
+      border: 1px solid rgba(255,255,255,0.12);
+      transition: opacity 0.2s;
+    }
+    .photo-strip img:hover { opacity: 1; }
+    .photo-strip-label {
+      font-size: 0.62rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      opacity: 0.3;
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+    .aurizon-hero {
+      width: 100%;
+      max-width: 580px;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 12px;
+      margin: 10px 0 6px;
+      opacity: 0.82;
+      border: 1px solid rgba(232,93,4,0.2);
+    }
+    .manila-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      max-width: 820px;
+      width: 100%;
+      margin: 18px 0 6px;
+    }
+    .manila-grid img {
+      width: 100%;
+      height: 130px;
+      object-fit: cover;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.08);
+      opacity: 0.8;
+    }
+    .au-photo-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 18px;
+      max-width: 820px;
+      width: 100%;
+    }
+    .au-photo-row img {
+      flex: 1;
+      height: 140px;
+      object-fit: cover;
+      border-radius: 10px;
+      border: 1px solid rgba(232,93,4,0.2);
+      opacity: 0.78;
+    }
+
+    .logo-sep {
+      font-size: 0.65rem;
+      color: var(--muted);
+      padding: 0 8px;
+      letter-spacing: 0.05em;
+    }
+
+    .footer-center {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .nav-btn {
+      width: 38px; height: 38px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.04);
+      color: var(--text);
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .nav-btn:hover:not(:disabled) {
+      background: rgba(255,255,255,0.1);
+      border-color: rgba(255,255,255,0.25);
+    }
+    .nav-btn:disabled { opacity: 0.2; cursor: not-allowed; }
+
+    #slideCounter {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+      min-width: 52px;
+      text-align: center;
+    }
+
+    .footer-right {
+      font-size: 0.7rem;
+      color: var(--muted);
+      text-align: right;
+      line-height: 1.4;
+      letter-spacing: 0.02em;
+    }
+    #activityBadge {
+      display: block;
+      font-size: 0.68rem;
+      color: var(--muted);
+      letter-spacing: 0.04em;
+    }
+
+    /* ── Col info ── */
+    .col-info {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      max-width: 880px;
+      width: 100%;
+      margin-top: 22px;
+      text-align: left;
+    }
+    .col-box {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 12px;
+      padding: 20px 22px;
+    }
+    .col-title {
+      font-size: 0.65rem; font-weight: 700;
+      letter-spacing: 0.16em; text-transform: uppercase;
+      opacity: 0.4; margin-bottom: 12px;
+    }
+    .col-box ul { list-style: none; padding: 0; }
+    .col-box ul li {
+      font-size: 0.92rem;
+      padding: 5px 0 5px 20px;
+      position: relative; line-height: 1.45;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+    .col-box ul li:last-child { border-bottom: none; }
+    .col-box ul li::before { content: '→'; position: absolute; left: 0; opacity: 0.25; }
+
+    /* ── Steps list ── */
+    .steps-list {
+      list-style: none;
+      text-align: left;
+      max-width: 700px;
+      width: 100%;
+      counter-reset: step-counter;
+    }
+    .steps-list li {
+      counter-increment: step-counter;
+      padding: 11px 0 11px 50px;
+      font-size: 1rem;
+      position: relative;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      line-height: 1.5;
+    }
+    .steps-list li:last-child { border-bottom: none; }
+    .steps-list li::before {
+      content: counter(step-counter);
+      position: absolute; left: 0; top: 10px;
+      width: 30px; height: 30px; border-radius: 50%;
+      background: rgba(232,93,4,0.2);
+      border: 1px solid rgba(255,154,92,0.35);
+      color: var(--au-light);
+      font-size: 0.78rem; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    /* ── This or That choice layout ── */
+    .tot-grid {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 24px;
+      max-width: 860px;
+      width: 100%;
+      margin-top: 20px;
+    }
+    .tot-option {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+      padding: 24px 28px;
+      text-align: center;
+      font-size: 1.4rem;
+      font-weight: 700;
+      line-height: 1.25;
+    }
+    .tot-option.left  { border-color: rgba(232,93,4,0.35); color: var(--au-light); }
+    .tot-option.right { border-color: rgba(157,194,145,0.35); color: var(--rf-light); }
+    .tot-vs {
+      font-size: 0.7rem;
+      font-weight: 800;
+      color: var(--muted);
+      letter-spacing: 0.2em;
+    }
+
+    /* ── Demo card ── */
+    .demo-box {
+      background: rgba(232,93,4,0.06);
+      border: 1px solid rgba(232,93,4,0.2);
+      border-radius: 14px;
+      padding: 28px 40px;
+      max-width: 760px;
+      text-align: left;
+      margin-top: 24px;
+    }
+    .demo-box .row { display: flex; align-items: flex-start; gap: 14px; padding: 8px 0; font-size: 1.05rem; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .demo-box .row:last-child { border-bottom: none; }
+
+    /* ── Challenge card grid ── */
+    .challenge-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      max-width: 900px;
+      width: 100%;
+      margin-top: 24px;
+    }
+    .challenge-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 14px;
+      padding: 22px 26px;
+      text-align: left;
+    }
+    .challenge-card.ca { border-left: 3px solid var(--au-light); }
+    .challenge-card.cb { border-left: 3px solid var(--rf-light); }
+    .challenge-card.cc { border-left: 3px solid var(--am-light); }
+    .card-tag {
+      display: inline-block;
+      font-size: 0.63rem; font-weight: 700;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      padding: 3px 10px; border-radius: 10px; margin-bottom: 10px;
+    }
+    .tag-together { background: rgba(255,154,92,0.12); color: var(--au-light); border: 1px solid rgba(255,154,92,0.3); }
+    .tag-challenge { background: rgba(157,194,145,0.12); color: var(--rf-light); border: 1px solid rgba(157,194,145,0.3); }
+    .tag-bonus     { background: rgba(74,159,224,0.12); color: var(--am-light); border: 1px solid rgba(74,159,224,0.3); }
+    .card-title { font-size: 1.05rem; font-weight: 700; margin-bottom: 6px; }
+    .card-desc  { font-size: 0.85rem; opacity: 0.55; line-height: 1.5; }
+
+    /* ── keyboard hint ── */
+    #kbHint {
+      position: fixed;
+      top: 20px; right: 24px;
+      font-size: 0.62rem;
+      color: rgba(255,255,255,0.2);
+      letter-spacing: 0.06em;
+      z-index: 400;
+    }
+
+    /* ── People cards ── */
+    .people-row {
+      display: flex;
+      gap: 20px;
+      margin-top: 24px;
+      justify-content: center;
+    }
+    .person-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 14px;
+      padding: 20px 28px;
+      text-align: center;
+      min-width: 160px;
+    }
+    .person-avatar { font-size: 2.8rem; margin-bottom: 10px; display: block; }
+    .person-name { font-size: 1.1rem; font-weight: 700; margin-bottom: 4px; }
+    .person-role { font-size: 0.75rem; opacity: 0.4; letter-spacing: 0.06em; text-transform: uppercase; }
+
+    /* Timer circle */
+    .timer-circle {
+      width: 120px; height: 120px;
+      border-radius: 50%;
+      border: 3px solid rgba(255,255,255,0.08);
+      background: rgba(232,93,4,0.1);
+      display: flex; align-items: center; justify-content: center;
+      flex-direction: column;
+      margin: 0 auto 20px;
+    }
+    .timer-num { font-size: 2.4rem; font-weight: 800; color: var(--au-light); line-height: 1; }
+    .timer-label { font-size: 0.7rem; opacity: 0.4; letter-spacing: 0.1em; text-transform: uppercase; }
+  </style>
+</head>
+<body>
+
+<div id="progressBar" style="width:0%"></div>
+<div id="kbHint">← → ARROW KEYS</div>
+<div id="slidesContainer"></div>
+
+<!-- Footer with logos + nav -->
+<div id="footer">
+  <div class="logo-group">
+    <div class="logo-pill logo-rf">
+      <img src="https://www.rail-flow.com/wp-content/uploads/2023/09/Rail-Flow-custom-navbar-logo.svg"
+           alt="Rail-Flow"
+           onerror="this.parentNode.innerHTML='<span style=\'font-size:0.8rem;font-weight:700;color:#9dc291;letter-spacing:0.05em\'>RAIL-FLOW</span>'">
+    </div>
+    <span class="logo-sep">×</span>
+    <div class="logo-pill logo-am">
+      <img src="https://amihansolutions.com/wp-content/uploads/2025/06/Layer-1.png"
+           alt="Amihan Solutions"
+           onerror="this.parentNode.innerHTML='<span style=\'font-size:0.8rem;font-weight:700;color:#4a9fe0;letter-spacing:0.05em\'>AMIHAN</span>'">
+    </div>
+    <span class="logo-sep">×</span>
+    <div class="logo-au-pill">
+      <img src="assets/aurizon-logo.png" alt="Aurizon" style="height:22px;width:auto;object-fit:contain;">
+    </div>
+  </div>
+
+  <div class="footer-center">
+    <button class="nav-btn" id="prevBtn" onclick="go(-1)" title="Previous (←)">&#8592;</button>
+    <span id="slideCounter">1 / …</span>
+    <button class="nav-btn" id="nextBtn" onclick="go(1)" title="Next (→)">&#8594;</button>
+  </div>
+
+  <div class="footer-right">
+    <span id="activityBadge"></span>
+    Office Day · Cebu · 2026
+  </div>
+</div>
+
+<script>
+const slides = [
+
+  // ── WELCOME ──────────────────────────────────────────────
+  {
+    bg: 'bg-welcome', badge: '',
+    html: `
+      <!-- Header spanning full photo width -->
+      <div style="
+        width:100%;
+        max-width:960px;
+        white-space:nowrap;
+        text-align:center;
+        font-family:'Inter',sans-serif;
+        font-size:2.05rem;
+        font-weight:800;
+        letter-spacing:0.06em;
+        text-transform:uppercase;
+        color:rgba(255,255,255,0.78);
+        margin-bottom:12px;
+      ">Rail-Flow &nbsp;·&nbsp; Amihan Solutions &nbsp;·&nbsp; Cebu 2026</div>
+
+      <!-- Aurizon photo triptych — LARGE -->
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;width:100%;max-width:960px;height:260px;margin-bottom:20px;">
+        <img style="width:100%;height:100%;object-fit:cover;border-radius:12px;border:1px solid rgba(232,93,4,0.25);" src="assets/aurizon-terminal.png" alt="Aurizon terminal">
+        <img style="width:100%;height:100%;object-fit:cover;border-radius:12px;border:1px solid rgba(232,93,4,0.25);" src="assets/aurizon-wagons.png" alt="Aurizon wagons">
+        <img style="width:100%;height:100%;object-fit:cover;border-radius:12px;border:1px solid rgba(232,93,4,0.25);" src="assets/aurizon-loco.png" alt="Aurizon locomotive">
+      </div>
+
+      <div class="main-title" style="font-size:2.8rem;margin-bottom:10px;">Office Day 🚂</div>
+      <div class="title-rule" style="margin-bottom:12px;"></div>
+      <div class="subtitle" style="font-size:1.1rem;">
+        A small team, a big customer, and a full day to connect.<br>
+        <span style="opacity:0.5;">Zyke &amp; Francis — great to finally meet you in person.</span>
+      </div>
+      <div class="tag-strip" style="margin-top:16px;">
+        <div class="tag tag-rf">Rail-Flow GmbH</div>
+        <div class="tag tag-am">Amihan Solutions</div>
+        <div class="tag tag-au">Aurizon Project</div>
+        <div class="tag" style="border-color:rgba(255,255,255,0.2);color:rgba(255,255,255,0.4);">Cebu · 2026</div>
+      </div>
+    `
+  },
+
+  // ── PEOPLE ───────────────────────────────────────────────
+  {
+    bg: 'bg-agenda', badge: '',
+    html: `
+      <div class="eyebrow" style="margin-bottom:8px;">Last Week — Manila &nbsp;·&nbsp; This Week — Cebu</div>
+      <div class="main-title" style="font-size:2rem;margin-bottom:18px;">Nice to Meet Each Other 👋</div>
+
+      <!-- Manila photos — natural aspect ratio, row extends off both screen edges -->
+      <div style="
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        gap:10px;
+        width:calc(100% + 192px);
+        margin-left:-96px;
+        margin-bottom:18px;
+        overflow:hidden;
+      ">
+        <img style="height:210px;width:auto;flex-shrink:0;border-radius:10px;border:1px solid rgba(255,255,255,0.1);" src="assets/manila-1.png" alt="Manila 1">
+        <img style="height:210px;width:auto;flex-shrink:0;border-radius:10px;border:1px solid rgba(255,255,255,0.1);" src="assets/manila-2.png" alt="Manila 2">
+        <img style="height:210px;width:auto;flex-shrink:0;border-radius:10px;border:1px solid rgba(255,255,255,0.1);" src="assets/manila-3.png" alt="Manila 3">
+        <img style="height:210px;width:auto;flex-shrink:0;border-radius:10px;border:1px solid rgba(255,255,255,0.1);" src="assets/manila-4.png" alt="Manila 4">
+      </div>
+
+      <div style="font-size:0.65rem;letter-spacing:0.18em;text-transform:uppercase;opacity:0.3;margin-bottom:14px;font-weight:700;">↓ &nbsp; This week — Cebu &nbsp; ↓</div>
+
+      <!-- Person cards — always visible below the photos -->
+      <div style="display:flex;gap:16px;justify-content:center;">
+        <div class="person-card" style="padding:14px 28px;">
+          <span class="person-avatar" style="font-size:2.2rem;margin-bottom:8px;">🧑‍💼</span>
+          <div class="person-name">Bart</div>
+          <div class="person-role">Rail-Flow · Germany</div>
+        </div>
+        <div class="person-card" style="padding:14px 28px;border-color:rgba(232,93,4,0.3);">
+          <span class="person-avatar" style="font-size:2.2rem;margin-bottom:8px;">🧑‍💻</span>
+          <div class="person-name">Zyke</div>
+          <div class="person-role">QA · Aurizon Project</div>
+        </div>
+        <div class="person-card" style="padding:14px 28px;border-color:rgba(157,194,145,0.3);">
+          <span class="person-avatar" style="font-size:2.2rem;margin-bottom:8px;">👨‍💻</span>
+          <div class="person-name">Francis</div>
+          <div class="person-role">QA + CSM · Aurizon Project</div>
+        </div>
+      </div>
+    `
+  },
+
+  // ── AGENDA ───────────────────────────────────────────────
+  {
+    bg: 'bg-agenda', badge: '',
+    html: `
+      <div class="eyebrow">Program Overview</div>
+      <div class="main-title" style="font-size:2.4rem;margin-bottom:28px;">Today's Agenda</div>
+      <div class="agenda-wrap">
+        <div class="a-row"><span class="a-time">09:00</span><div class="a-dot dot-mix"></div><span class="a-act">Welcome &amp; introductions</span></div>
+        <div class="a-row"><span class="a-time">09:15</span><div class="a-dot dot-au"></div><span class="a-act">🎲 Icebreaker 1 — Human Bingo</span></div>
+        <div class="a-row"><span class="a-time">09:45</span><div class="a-dot dot-rf"></div><span class="a-act">🔀 Icebreaker 2 — This or That</span></div>
+        <div class="a-row"><span class="a-time">10:10</span><div class="a-dot dot-au"></div><span class="a-act">🚂 Aurizon App Demo — Zyke &amp; Francis show their work</span></div>
+        <div class="a-row"><span class="a-time">11:30</span><div class="a-dot dot-brk"></div><span class="a-act">🍽️ Lunch Break</span></div>
+        <div class="a-row"><span class="a-time">13:00</span><div class="a-dot dot-am"></div><span class="a-act">🤖 AI Session — Playwright together</span></div>
+        <div class="a-row"><span class="a-time">14:15</span><div class="a-dot dot-mix"></div><span class="a-act">⚡ Codegen Challenge — best prompt wins</span></div>
+        <div class="a-row"><span class="a-time">15:30</span><div class="a-dot dot-rf"></div><span class="a-act">💬 Reflection &amp; wrap-up</span></div>
+        <div class="a-row"><span class="a-time">18:00</span><div class="a-dot dot-brk"></div><span class="a-act" style="font-weight:700;">🍜 Dinner together 🎉</span></div>
+      </div>
+    `
+  },
+
+  // ── ACT 1: HUMAN BINGO ───────────────────────────────────
+  {
+    bg: 'bg-h1', badge: 'Icebreaker 1 of 2',
+    html: `
+      <div class="deco-line"></div>
+      <div class="eyebrow c1">Icebreaker 1 of 2 · 30 minutes</div>
+      <div class="main-title">Human Bingo 🎲</div>
+      <div class="title-rule"></div>
+      <div class="subtitle" style="color:rgba(255,255,255,0.6);">
+        Raise your hand if the statement<br><strong style="color:var(--au-light)">applies to you.</strong>
+      </div>
+    `
+  },
+  {
+    bg: 'bg-q1', badge: 'Icebreaker 1 · Human Bingo',
+    html: `
+      <div class="eyebrow c1">Rules — simple</div>
+      <div class="main-title" style="font-size:2.2rem;max-width:820px;margin:0 auto 28px;">
+        I read a statement.<br>
+        <span class="c1">Raise your hand if it's true for you.</span>
+      </div>
+      <div class="info-box">
+        <div class="row">🙋&nbsp; Raise your hand — no hiding!</div>
+        <div class="row">💬&nbsp; If you're the <strong>only one</strong> with your hand up, explain in one sentence</div>
+        <div class="row">😄&nbsp; We're here to learn about each other — no wrong answers</div>
+      </div>
+    `
+  },
+
+  // Bingo — General
+  { bg:'bg-q1', badge:'Icebreaker 1 · Human Bingo',
+    html:`<div class="q-badge qb-1">Raise your hand if... 🙋</div>
+          <div class="q-text">...you have ever found a bug that<br><span class="c1">crashed the entire system.</span></div>`
+  },
+  { bg:'bg-q1', badge:'Icebreaker 1 · Human Bingo',
+    html:`<div class="q-badge qb-1">Raise your hand if... 🙋</div>
+          <div class="q-text">...a developer ever told you:<br><span class="c1">"It works on my machine!"</span> 😅</div>`
+  },
+  { bg:'bg-q1', badge:'Icebreaker 1 · Human Bingo',
+    html:`<div class="q-badge qb-1">Raise your hand if... 🙋</div>
+          <div class="q-text">...you've <span class="c1">accidentally broken something</span><br>while testing.</div>`
+  },
+  { bg:'bg-q1', badge:'Icebreaker 1 · Human Bingo',
+    html:`<div class="q-badge qb-1">Raise your hand if... 🙋</div>
+          <div class="q-text">...you prefer <span class="c1">automation</span><br>over manual testing.</div>`
+  },
+  { bg:'bg-q1', badge:'Icebreaker 1 · Human Bingo',
+    html:`<div class="q-badge qb-1">Raise your hand if... 🙋</div>
+          <div class="q-text">...you have ever written a bug report<br><span class="c1">for a bug caused by yourself.</span></div>`
+  },
+  // Bingo — Philippines / Personal
+  { bg:'bg-q1', badge:'Icebreaker 1 · Human Bingo',
+    html:`<div class="q-badge qb-1">Raise your hand if... 🙋</div>
+          <div class="q-text">...you had <span class="c1">lechon or sinugba</span><br>this week.</div>`
+  },
+  { bg:'bg-q1', badge:'Icebreaker 1 · Human Bingo',
+    html:`<div class="q-badge qb-1">Raise your hand if... 🙋</div>
+          <div class="q-text">...you have traveled<br><span class="c1">outside the Philippines.</span></div>`
+  },
+  { bg:'bg-q1', badge:'Icebreaker 1 · Human Bingo',
+    html:`<div class="q-badge qb-1">Raise your hand if... 🙋</div>
+          <div class="q-text">...you are a <span class="c1">night owl</span><br>who does their best work after 21:00. 🦉</div>`
+  },
+  { bg:'bg-q1', badge:'Icebreaker 1 · Human Bingo',
+    html:`<div class="q-badge qb-1">Raise your hand if... 🙋</div>
+          <div class="q-text">...you have a <span class="c1">secret talent</span><br>completely unrelated to IT.</div>
+          <div class="q-hint">If you raised your hand — share it in one sentence!</div>`
+  },
+  // Bingo — Aurizon / Rail context
+  { bg:'bg-q1', badge:'Icebreaker 1 · Human Bingo · 🚂 Rail Round',
+    html:`<div class="q-badge qb-1" style="background:rgba(232,93,4,0.15);">🚂 &nbsp; Rail Round</div>
+          <div class="q-text" style="font-size:clamp(1rem,2vw,1.4rem);margin-bottom:0.6rem;color:var(--muted);">Let's see how well you know the Aurizon world...</div>
+          <div class="q-hint">Hands ready!</div>`
+  },
+  { bg:'bg-q1', badge:'Icebreaker 1 · Human Bingo · 🚂 Rail Round',
+    html:`<div class="q-badge qb-1" style="background:rgba(232,93,4,0.15);">Raise your hand if... 🙋</div>
+          <div class="q-text">...you have ever <span class="c1">ridden a freight train.</span></div>`
+  },
+  { bg:'bg-q1', badge:'Icebreaker 1 · Human Bingo · 🚂 Rail Round',
+    html:`<div class="q-badge qb-1" style="background:rgba(232,93,4,0.15);">Raise your hand if... 🙋</div>
+          <div class="q-text">...you could explain to Bart<br><span class="c1">what Aurizon's core business is</span><br><em style="font-size:1.4rem;font-weight:500;opacity:0.55;">in under 30 seconds.</em></div>
+          <div class="q-hint">If both hands go up — we'll hear both explanations 😄</div>`
+  },
+  { bg:'bg-q1', badge:'Icebreaker 1 · Human Bingo · 🚂 Rail Round',
+    html:`<div class="q-badge qb-1" style="background:rgba(232,93,4,0.15);">Raise your hand if... 🙋</div>
+          <div class="q-text">...you have <span class="c1">already used Cursor AI</span><br>for something on the Aurizon project.</div>`
+  },
+
+  // ── ACT 2: THIS OR THAT ──────────────────────────────────
+  {
+    bg: 'bg-h2', badge: 'Icebreaker 2 of 2',
+    html: `
+      <div class="deco-line"></div>
+      <div class="eyebrow c2">Icebreaker 2 of 2 · 20 minutes</div>
+      <div class="main-title">This or That 🔀</div>
+      <div class="title-rule"></div>
+      <div class="subtitle" style="color:rgba(255,255,255,0.6);">
+        Quick binary choices.<br><strong style="color:var(--rf-light)">Pick one — and explain why in one sentence.</strong>
+      </div>
+    `
+  },
+  {
+    bg: 'bg-q2', badge: 'Icebreaker 2 · This or That',
+    html: `
+      <div class="eyebrow c2">How it works</div>
+      <div class="main-title" style="font-size:2rem;margin-bottom:24px;">Everyone picks a side</div>
+      <div class="info-box">
+        <div class="row">👈&nbsp; I show two options</div>
+        <div class="row">🗣️&nbsp; Everyone picks — and <strong>gives one reason</strong></div>
+        <div class="row">💡&nbsp; No "both" — you have to commit to one!</div>
+      </div>
+    `
+  },
+  { bg:'bg-q2', badge:'Icebreaker 2 · This or That',
+    html:`<div class="tot-grid">
+            <div class="tot-option left">Manual<br>Testing</div>
+            <div class="tot-vs">OR</div>
+            <div class="tot-option right">Automated<br>Testing</div>
+          </div>
+          <div class="q-hint">No "both" — pick one and give your reason</div>`
+  },
+  { bg:'bg-q2', badge:'Icebreaker 2 · This or That',
+    html:`<div class="tot-grid">
+            <div class="tot-option left">Find the bug<br><em style="font-size:0.9rem;opacity:0.6;">yourself</em></div>
+            <div class="tot-vs">OR</div>
+            <div class="tot-option right">Ask a<br>colleague</div>
+          </div>
+          <div class="q-hint">When you're stuck — what's your first move?</div>`
+  },
+  { bg:'bg-q2', badge:'Icebreaker 2 · This or That',
+    html:`<div class="tot-grid">
+            <div class="tot-option left">Test by<br>clicking through 🖱️</div>
+            <div class="tot-vs">OR</div>
+            <div class="tot-option right">Test by<br>reading the code 👀</div>
+          </div>
+          <div class="q-hint">When you start testing a new APEX feature — where do you begin?</div>`
+  },
+  { bg:'bg-q2', badge:'Icebreaker 2 · This or That',
+    html:`<div class="tot-grid">
+            <div class="tot-option left">Write tests<br><em style="font-size:0.9rem;opacity:0.6;">before</em> the feature</div>
+            <div class="tot-vs">OR</div>
+            <div class="tot-option right">Write tests<br><em style="font-size:0.9rem;opacity:0.6;">after</em> the feature</div>
+          </div>`
+  },
+  { bg:'bg-q2', badge:'Icebreaker 2 · This or That',
+    html:`<div class="tot-grid">
+            <div class="tot-option left">100%<br>coverage 📋</div>
+            <div class="tot-vs">OR</div>
+            <div class="tot-option right">Smart<br>coverage 🎯</div>
+          </div>
+          <div class="q-hint">Quantity vs quality — what do you actually believe in?</div>`
+  },
+  { bg:'bg-q2', badge:'Icebreaker 2 · This or That',
+    html:`<div class="tot-grid">
+            <div class="tot-option left">Dark mode 🌙</div>
+            <div class="tot-vs">OR</div>
+            <div class="tot-option right">Light mode ☀️</div>
+          </div>
+          <div class="q-hint">The real question that defines character</div>`
+  },
+
+  // ── AURIZON DEMO ─────────────────────────────────────────
+  {
+    bg: 'bg-h1', badge: 'App Demo',
+    html: `
+      <div class="deco-line"></div>
+      <div class="eyebrow c1">10:10 · Up to 80 minutes</div>
+      <div class="main-title">🚂 Aurizon App Demo</div>
+      <div class="title-rule" style="margin-bottom:16px;"></div>
+      <div class="au-photo-row">
+        <img src="assets/aurizon-terminal.png" alt="Aurizon terminal">
+        <img src="assets/aurizon-wagons.png" alt="Aurizon wagons">
+        <img src="assets/aurizon-loco.png" alt="Aurizon locomotive">
+      </div>
+      <div class="subtitle" style="color:rgba(255,255,255,0.6);margin-top:16px;">
+        Zyke &amp; Francis take the wheel.<br>
+        <strong style="color:var(--au-light)">Show me your world.</strong>
+      </div>
+    `
+  },
+  {
+    bg: 'bg-demo', badge: 'App Demo · Context',
+    html: `
+      <div class="eyebrow c1">Context for Bart</div>
+      <div class="main-title" style="font-size:2rem;margin-bottom:20px;">What I'd Love to See</div>
+      <div class="demo-box">
+        <div class="row">🗺️&nbsp;<div><strong>Big picture</strong> — what does the application do for Aurizon?<br><span style="opacity:0.45;font-size:0.85rem;">Scope, users, main workflows</span></div></div>
+        <div class="row">🧪&nbsp;<div><strong>How you test it</strong> — walk me through your QA process<br><span style="opacity:0.45;font-size:0.85rem;">Test types, tools, environments</span></div></div>
+        <div class="row">😤&nbsp;<div><strong>What's painful</strong> — the parts that cost you time<br><span style="opacity:0.45;font-size:0.85rem;">This will help us prioritize the AI afternoon!</span></div></div>
+        <div class="row">🐛&nbsp;<div><strong>A real bug</strong> — show me something you're working on right now</div></div>
+      </div>
+      <div class="q-hint" style="margin-top:20px;">No slides needed — just share your screen and talk me through it</div>
+    `
+  },
+  {
+    bg: 'bg-demo', badge: 'App Demo · Questions',
+    html: `
+      <div class="eyebrow c1">Questions I'll Be Asking</div>
+      <div class="main-title" style="font-size:2rem;margin-bottom:20px;">So I Can Understand Your Work</div>
+      <ul class="bullet-list" style="max-width:680px;">
+        <li>How many test cases do you maintain for this project?</li>
+        <li>What does a typical bug report look like?</li>
+        <li>What does Aurizon care most about in terms of quality?</li>
+        <li>Which areas have the most flaky or unpredictable behavior?</li>
+        <li>Where does the most time go in your test cycle?</li>
+        <li>Have you tried any automation on this project yet?</li>
+      </ul>
+      <div class="q-hint" style="margin-top:16px;">These aren't a checklist — just conversation starters</div>
+    `
+  },
+
+  // ── LUNCH ────────────────────────────────────────────────
+  {
+    bg: 'bg-break', badge: '',
+    html: `
+      <div class="big-emoji">🍽️</div>
+      <div class="eyebrow" style="color:#f0c040;opacity:0.8;">Break</div>
+      <div class="main-title" style="color:#f0c040;">Lunch Break</div>
+      <div class="title-rule" style="background:#f0c040;opacity:0.4;"></div>
+      <div class="subtitle">Good food, good conversation.<br>Back at <strong>13:00</strong> for AI.</div>
+    `
+  },
+
+  // ── AI AFTERNOON ─────────────────────────────────────────
+  {
+    bg: 'bg-hack', badge: 'AI Session',
+    html: `
+      <div class="deco-line"></div>
+      <div class="eyebrow c3">Afternoon · 13:00</div>
+      <div class="main-title">AI Session 🤖</div>
+      <div class="title-rule"></div>
+      <div class="subtitle" style="color:rgba(255,255,255,0.6);">
+        We work <strong style="color:var(--am-light)">together</strong> — not separately.<br>
+        <span style="opacity:0.45;">One screen, three heads, real results.</span>
+      </div>
+    `
+  },
+  {
+    bg: 'bg-agenda', badge: 'AI Session · Plan',
+    html: `
+      <div class="eyebrow" style="color:var(--am-light);opacity:0.8;">AI Session · Afternoon Plan</div>
+      <div class="main-title" style="font-size:2.2rem;margin-bottom:28px;">What We'll Build Together</div>
+      <div class="agenda-wrap">
+        <div class="a-row"><span class="a-time">13:00</span><div class="a-dot dot-am"></div><span class="a-act">🎯 Recap — what part of Aurizon is hardest to test?</span></div>
+        <div class="a-row"><span class="a-time">13:15</span><div class="a-dot dot-rf"></div><span class="a-act">🎭 Together — record a Codegen session on Aurizon</span></div>
+        <div class="a-row"><span class="a-time">13:40</span><div class="a-dot dot-am"></div><span class="a-act">🤝 Together — turn the recording into a clean Playwright test</span></div>
+        <div class="a-row"><span class="a-time">14:15</span><div class="a-dot dot-au"></div><span class="a-act">⚡ Challenge — who writes the best prompt? Race!</span></div>
+        <div class="a-row"><span class="a-time">15:15</span><div class="a-dot dot-mix"></div><span class="a-act">💬 Show, compare, reflect</span></div>
+      </div>
+    `
+  },
+
+  // ── STEP 1: CODEGEN TOGETHER ──────────────────────────────
+  {
+    bg: 'bg-h3', badge: 'AI Session · Step 1',
+    html: `
+      <div class="deco-line"></div>
+      <div class="eyebrow c3">Step 1 of 3 · 25 minutes</div>
+      <div class="main-title">🎭 Record with Playwright Codegen</div>
+      <div class="title-rule"></div>
+      <div class="subtitle" style="color:rgba(255,255,255,0.6);">
+        We record a real workflow in the Aurizon app<br><strong style="color:var(--am-light)">together — one recording, shared starting point.</strong>
+      </div>
+    `
+  },
+  {
+    bg: 'bg-hack-q', badge: 'AI Session · Step 1 · Codegen',
+    html: `
+      <div class="eyebrow c3">How Playwright Codegen works</div>
+      <div class="main-title" style="font-size:2rem;margin-bottom:22px;">Record → Raw Code → Clean Test</div>
+      <ol class="steps-list" style="--am-light:var(--am-light);">
+        <li>Zyke or Francis picks a real workflow in the Aurizon app to record</li>
+        <li>Run: <strong style="color:var(--am-light);">npx playwright codegen [aurizon-app-url]</strong></li>
+        <li>Walk through the workflow — Playwright captures every click &amp; input</li>
+        <li>Copy the generated code — this is our <strong>shared raw material</strong></li>
+        <li>Now: everyone gets the same code. Who can turn it into the best Playwright test?</li>
+      </ol>
+      <div class="q-hint" style="margin-top:20px;">We all start with the <strong>same raw codegen output</strong> — fair game for everyone</div>
+    `
+  },
+
+  // ── STEP 2: BUILD TOGETHER ────────────────────────────────
+  {
+    bg: 'bg-h3', badge: 'AI Session · Step 2',
+    html: `
+      <div class="deco-line"></div>
+      <div class="eyebrow c3">Step 2 of 3 · 35 minutes</div>
+      <div class="main-title">🤝 Build the Test — Together</div>
+      <div class="title-rule"></div>
+      <div class="subtitle" style="color:rgba(255,255,255,0.6);">
+        One shared screen, one test file.<br>
+        <strong style="color:var(--am-light)">We improve the raw code together using Cursor AI.</strong>
+      </div>
+    `
+  },
+  {
+    bg: 'bg-hack-q', badge: 'AI Session · Step 2 · Build',
+    html: `
+      <div class="eyebrow c3">What "good" looks like</div>
+      <div class="main-title" style="font-size:2rem;margin-bottom:22px;">Raw Code → Production Test</div>
+      <div class="col-info">
+        <div class="col-box">
+          <div class="col-title">😬 Raw Codegen (messy)</div>
+          <ul>
+            <li>Hardcoded selectors like <code style="opacity:0.7;">#id_4829a</code></li>
+            <li>No assertions — just clicks</li>
+            <li>No page object, no reuse</li>
+            <li>Breaks on next deploy</li>
+          </ul>
+        </div>
+        <div class="col-box" style="border-color:rgba(74,159,224,0.2);">
+          <div class="col-title">✅ Clean Playwright Test</div>
+          <ul>
+            <li>Readable selectors (role, label, text)</li>
+            <li>Meaningful assertions that verify behavior</li>
+            <li>Descriptive test name &amp; steps</li>
+            <li><strong style="color:var(--am-light)">Runs locally — we verify it live</strong></li>
+          </ul>
+        </div>
+      </div>
+      <div class="q-hint" style="margin-top:18px;">💡 Cursor AI prompt: <em>"Take this Playwright codegen output and rewrite it as a clean, robust test with semantic selectors and meaningful assertions."</em></div>
+    `
+  },
+
+  // ── STEP 3: CHALLENGE ─────────────────────────────────────
+  {
+    bg: 'bg-h1', badge: 'AI Session · Step 3 · CHALLENGE',
+    html: `
+      <div class="deco-line"></div>
+      <div class="eyebrow c1">Step 3 of 3 · The Challenge ⚡</div>
+      <div class="main-title">Best Prompt Wins</div>
+      <div class="title-rule"></div>
+      <div class="subtitle" style="color:rgba(255,255,255,0.6);">
+        Same raw code. Same goal. Different prompts.<br>
+        <strong style="color:var(--au-light)">Who produces the cleanest, locally-running test — fastest?</strong>
+      </div>
+    `
+  },
+  {
+    bg: 'bg-q1', badge: 'AI Session · Challenge · Rules',
+    html: `
+      <div class="eyebrow c1">Challenge Rules</div>
+      <div class="main-title" style="font-size:2rem;margin-bottom:22px;">Everyone works independently</div>
+      <div class="info-box">
+        <div class="row">🧑‍💻&nbsp;<div><strong>Same starting point:</strong> the raw codegen output we recorded together</div></div>
+        <div class="row">🎯&nbsp;<div><strong>Goal:</strong> A locally running Playwright test that actually passes</div></div>
+        <div class="row">⏱️&nbsp;<div><strong>Time limit:</strong> <span style="color:var(--au-light);font-weight:700;">25 minutes</span></div></div>
+        <div class="row">💬&nbsp;<div><strong>The twist:</strong> write your Cursor prompt <em>first</em> before pasting the code — then compare prompts at the end</div></div>
+        <div class="row">🏆&nbsp;<div><strong>Win:</strong> test runs locally + best prompt quality (clear, specific, reusable)</div></div>
+      </div>
+      <div class="q-hint" style="margin-top:18px;">A precise prompt will beat a vague one — every time. This will show exactly how much prompting matters.</div>
+    `
+  },
+  {
+    bg: 'bg-q1', badge: 'AI Session · Challenge · Timer',
+    html: `
+      <div class="timer-circle">
+        <span class="timer-num">25</span>
+        <span class="timer-label">minutes</span>
+      </div>
+      <div class="eyebrow c1">Go! ⚡</div>
+      <div class="main-title" style="font-size:2.8rem;">Start Prompting</div>
+      <div class="subtitle" style="margin-top:14px;opacity:0.55;">
+        Write your prompt → paste the codegen code →<br>refine → run → make it pass.
+      </div>
+      <div class="q-hint" style="margin-top:20px;">Save your prompt — you'll share it at the end!</div>
+    `
+  },
+  {
+    bg: 'bg-hack-q', badge: 'AI Session · Challenge · Debrief',
+    html: `
+      <div class="eyebrow c3">15:15 · Debrief</div>
+      <div class="main-title" style="font-size:2.2rem;margin-bottom:22px;">Compare &amp; Learn</div>
+      <div class="info-box" style="max-width:740px;">
+        <div class="row" style="padding:14px 0;border-bottom:1px solid rgba(255,255,255,0.06);font-size:1.05rem;">
+          <span style="font-size:1.4rem;margin-right:8px;">1️⃣</span> <strong>Show your prompt</strong> — read it out loud
+        </div>
+        <div class="row" style="padding:14px 0;border-bottom:1px solid rgba(255,255,255,0.06);font-size:1.05rem;">
+          <span style="font-size:1.4rem;margin-right:8px;">2️⃣</span> <strong>Run your test</strong> — does it pass? 🟢 / 🔴
+        </div>
+        <div class="row" style="padding:14px 0;border-bottom:1px solid rgba(255,255,255,0.06);font-size:1.05rem;">
+          <span style="font-size:1.4rem;margin-right:8px;">3️⃣</span> <strong>What made the difference?</strong> — specific vs vague, context vs no context
+        </div>
+        <div class="row" style="padding:14px 0;font-size:1.05rem;">
+          <span style="font-size:1.4rem;margin-right:8px;">4️⃣</span> <strong>Build the "ideal" prompt together</strong> — combine the best parts
+        </div>
+      </div>
+    `
+  },
+
+  // ── REFLECTION ───────────────────────────────────────────
+  {
+    bg: 'bg-break', badge: 'Wrap-up',
+    html: `
+      <div class="eyebrow" style="color:rgba(255,255,255,0.4);">15:30 · Wrap-up</div>
+      <div class="main-title" style="color:#f0c040;">Reflection</div>
+      <div class="title-rule" style="background:#f0c040;opacity:0.4;"></div>
+      <div class="subtitle">
+        Three questions to close the day:
+      </div>
+      <div class="info-box" style="margin-top:22px;max-width:640px;">
+        <div class="row" style="padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
+          🧠&nbsp; What's one thing you learned today you'll actually use next week?
+        </div>
+        <div class="row" style="padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
+          🚂&nbsp; Where on the Aurizon project could AI help the most right now?
+        </div>
+        <div class="row" style="padding:10px 0;">
+          🙌&nbsp; One word to describe today?
+        </div>
+      </div>
+    `
+  },
+
+  // ── DINNER ───────────────────────────────────────────────
+  {
+    bg: 'bg-welcome', badge: '',
+    html: `
+      <div class="big-emoji">🍜</div>
+      <div class="eyebrow">Evening</div>
+      <div class="main-title">Dinner Time! 🎉</div>
+      <div class="title-rule"></div>
+      <div class="subtitle">
+        18:00 — let's find the best food in Cebu.<br>
+        <span style="opacity:0.45;">Work stays here — tonight is just about good company.</span>
+      </div>
+      <div class="tag-strip">
+        <div class="tag tag-rf">Rail-Flow GmbH</div>
+        <div class="tag tag-am">Amihan Solutions</div>
+        <div class="tag tag-au">Aurizon Project</div>
+      </div>
+    `
+  },
+
+  // ── MEMORIES ─────────────────────────────────────────────
+  {
+    bg: 'bg-agenda', badge: '',
+    html: `
+      <div class="eyebrow" style="margin-bottom:8px;">Cebu · April 2026</div>
+      <div class="main-title" style="font-size:2rem;margin-bottom:22px;">Great Day Together 📸</div>
+
+      <div style="
+        display:flex;
+        align-items:stretch;
+        justify-content:center;
+        gap:16px;
+        width:100%;
+        max-width:960px;
+      ">
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;">
+          <img src="assets/cebu-workshop.png" alt="Workshop Cebu" style="width:100%;height:340px;object-fit:cover;border-radius:14px;border:1px solid rgba(255,255,255,0.1);">
+          <div style="font-size:0.7rem;letter-spacing:0.14em;text-transform:uppercase;opacity:0.4;font-weight:700;">Workshop</div>
+        </div>
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;">
+          <img src="assets/cebu-lunch.png" alt="Lunch Cebu" style="width:100%;height:340px;object-fit:cover;border-radius:14px;border:1px solid rgba(255,255,255,0.1);">
+          <div style="font-size:0.7rem;letter-spacing:0.14em;text-transform:uppercase;opacity:0.4;font-weight:700;">Lunch</div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:16px;justify-content:center;margin-top:18px;">
+        <div class="tag tag-rf">Bart</div>
+        <div class="tag tag-au">Zyke</div>
+        <div class="tag" style="background:rgba(157,194,145,0.15);border:1px solid rgba(157,194,145,0.3);color:#9dc291;">Francis</div>
+      </div>
+    `
+  }
+
+];
+
+// ═══════════════════════════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════════════════════════
+let current = 0;
+let animating = false;
+
+function renderSlide(idx) {
+  if (animating) return;
+  animating = true;
+
+  const container = document.getElementById('slidesContainer');
+  const total = slides.length;
+  const s = slides[idx];
+
+  const old = container.querySelector('.slide.active');
+  if (old) {
+    old.classList.add('exit');
+    old.classList.remove('active');
+    setTimeout(() => { if (old.parentNode) old.remove(); }, 380);
+  }
+
+  const el = document.createElement('div');
+  el.className = `slide ${s.bg}`;
+  el.innerHTML = s.html;
+  container.appendChild(el);
+
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    el.classList.add('active');
+    animating = false;
+  }));
+
+  const pct = ((idx + 1) / total * 100).toFixed(1);
+  document.getElementById('progressBar').style.width = pct + '%';
+  document.getElementById('slideCounter').textContent = `${idx + 1} / ${total}`;
+  document.getElementById('activityBadge').textContent = s.badge || '';
+
+  document.getElementById('prevBtn').disabled = idx === 0;
+  document.getElementById('nextBtn').disabled = idx === total - 1;
+}
+
+function go(dir) {
+  const next = current + dir;
+  if (next < 0 || next >= slides.length || animating) return;
+  current = next;
+  renderSlide(current);
+}
+
+document.addEventListener('keydown', e => {
+  if (['ArrowRight', 'ArrowDown', ' '].includes(e.key)) { e.preventDefault(); go(1); }
+  if (['ArrowLeft', 'ArrowUp'].includes(e.key))          { e.preventDefault(); go(-1); }
+});
+
+renderSlide(0);
+</script>
+</body>
+</html>
